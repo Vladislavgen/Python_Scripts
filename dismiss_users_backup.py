@@ -1,8 +1,10 @@
 import os
 import shutil
 import time
-
-print("\tРазработано для Bingo-Boom.com by SIGNDERTON\n")
+import distutils
+from distutils import util
+import distutils.core
+print("Разработано для Bingo-Boom.com by SIGNDERTON\n")
 
 # ФУНКЦИОНАЛ #
 
@@ -148,7 +150,9 @@ def copy(user_list):
         print(org + " копирование...")
         # скопируем все каталоги в созданный
         # копирование дерева  - откуда - куда
-        shutil.copytree('' + source_path + '/' + org + '', destination_path + '/' + org + '')
+        distutils.dir_util.copy_tree(source_path + '/' + org + '', destination_path + org + '', verbose=0)
+        #shutil.copy('' + source_path + org + '', destination_path + org + '')
+
         print(org + " копирование завершено\n")
     back_to_main()
 
@@ -167,7 +171,7 @@ def zip(user_list):
     for org in user_list:
         print(org + " архивация...")
         shutil.make_archive('' + backup_path + org, 'zip', destination_path + org + '')
-        shutil.make_archive(org, bu)
+        # shutil.make_archive(org, bu)
     back_to_main()
 
 def archive(user_list):
@@ -186,7 +190,6 @@ def archive(user_list):
     # Путь к каталогу в который надо копировать
     destination_path = "//bbstore/backup$/TESTED/destination/"
     # Путь к каталогу в который сохранять архивы
-    backup_path = "//bbstore/backup$/TESTED/archive/"
     for org in user_list:
         print("... archive directory %s" % destination_path)
         arch_path = shutil.make_archive(
@@ -196,7 +199,7 @@ def archive(user_list):
             # logger=log,
             format='zip')
         print("... Архивируем %s" % destination_path)
-        return destination_path
+
 
 def delete(user_list):
     """ УДАЛЕНИЕ ДИРЕКТОРИЙ ПОЛЬЗОВАТЕЛЕЙ"""
