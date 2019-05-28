@@ -6,8 +6,8 @@ from distutils import util
 import distutils.core
 print("Разработано для Bingo-Boom.com by SIGNDERTON\n")
 
-# ФУНКЦИОНАЛ #
 
+# ФУНКЦИОНАЛ #
 def cls():
     print("\n" * 100)
 
@@ -79,9 +79,6 @@ def main_menu():
     #     finally:
     #         break
 
-
-    # while True:
-    #     try:
     if script_action == "1":
         cls() # Чистим консоль
         print("\t*** Читаем список пользователей из файла dissmiss_account_list.txt ***")
@@ -104,7 +101,7 @@ def main_menu():
     elif script_action == "4":
         cls()  # Чистим консоль
         print("*** Архивация пользователей в backup$ ***")
-        archive(user_list)
+        zip(user_list)
         back_to_main()
 
     elif script_action == "5":
@@ -119,15 +116,7 @@ def main_menu():
         print("*** Ошибка! Выберите существующий вариант! ***")
         delete(user_list)
         back_to_main()
-    #
-    #     except:
-    #         # Выбор способа оплаты
-    #         print('Условия не выполнены')
-    #         back_to_main()
-    #         # Ошибка, Добавляем кнопки главного меню
-    #         pass
-    #     finally:
-    #         break
+
 
 def  back_to_main():
     print("Для возврата в главное меню введите 0")
@@ -151,8 +140,6 @@ def copy(user_list):
         # скопируем все каталоги в созданный
         # копирование дерева  - откуда - куда
         distutils.dir_util.copy_tree(source_path + '/' + org + '', destination_path + org + '', verbose=0)
-        #shutil.copy('' + source_path + org + '', destination_path + org + '')
-
         print(org + " копирование завершено\n")
     back_to_main()
 
@@ -163,81 +150,52 @@ def move(user_list):
         # скопируем все каталоги в созданный
         # копирование дерева  - откуда - куда
         shutil.move('' + source_path + '/' + org + '', destination_path + '/' + org + '')
-        print(org + " перемещение завершено\n")
+        print(org + " перемещение завершено\n\n")
+        time.sleep(5)
     back_to_main()
 
 def zip(user_list):
     """ АРХИВАЦИЯ ДИРЕКТОРИЙ ПОЛЬЗОВАТЕЛЕЙ """
     for org in user_list:
         print(org + " архивация...")
-        shutil.make_archive('' + backup_path + org, 'zip', destination_path + org + '')
-        # shutil.make_archive(org, bu)
+        shutil.make_archive(backup_path + org, 'zip', destination_path + org + '/')
+        print(org + " архивация завершена.\n\n")
+        time.sleep(5)
     back_to_main()
-
-def archive(user_list):
-    """Archive source directory to temp directory.
-    Return archive full path.
-    """
-    # We want to achive `/my/sub/{some dir}` under unique temp dir:
-    # `/tmp/dEdjnr/{name from config}`
-    #
-    # So we make archive from base path `/my/sub/{some dir}`,
-    # root path `/my/sub/` and archive name
-    # `/tmp/dEdjnr/{name from config}`
-
-
-    from_path = "//bbstore/backup$/TESTED/source/"
-    # Путь к каталогу в который надо копировать
-    destination_path = "//bbstore/backup$/TESTED/destination/"
-    # Путь к каталогу в который сохранять архивы
-    for org in user_list:
-        print("... archive directory %s" % destination_path)
-        arch_path = shutil.make_archive(
-            base_name=org,
-            root_dir=os.path.dirname(from_path + '/' + org),
-            base_dir=from_path + '/' + org,
-            # logger=log,
-            format='zip')
-        print("... Архивируем %s" % destination_path)
-
 
 def delete(user_list):
     """ УДАЛЕНИЕ ДИРЕКТОРИЙ ПОЛЬЗОВАТЕЛЕЙ"""
     for org in user_list:
         print(org + " Удаление...")
         shutil.rmtree(source_path + '/' + org + '' + '/*')
+        print(org + " Удаление завершено")
     back_to_main()
     pass
 
 # ФУНКЦИОНАЛ #
 
+
 # ОБРАБОТКА ФАЙЛА С ЛОГИНАМИ ПОЛЬЗОВАТЕЛЕЙ # START #
 # Название каталогов, которые надо копировать с их содержимым:
 with open('dissmiss_account_list', 'r') as dissmiss_users:
     user_list = dissmiss_users.read().split('\n')
-
 # ОБРАБОТКА ФАЙЛА С ЛОГИНАМИ ПОЛЬЗОВАТЕЛЕЙ # END #
 
+
 # Настройки:
-# Путь к основному каталогу откуда надо копировать
-source_path = "//bbstore/backup$/TESTED/source/"
-# Путь к основному каталогу откуда надо удалять
-path_delete = "//bbstore/backup$/TESTED/source/"
-#'//bbstore/Profiles$'\
+# Путь к основному каталогу откуда надо копировать, а затем удалять
+source_path = '//bbstore/Profiles$'
+
+# "//bbstore/backup$/TESTED/source/" #Путь для тестирования скрипта
+#\
 
 # Путь к каталогу в который надо копировать
-destination_path = "//bbstore/backup$/TESTED/destination/"
+destination_path = "//bbstore/backup$/Profiles/DISSMISS/"
 # Путь к каталогу в который сохранять архивы
-backup_path = "//bbstore/backup$/TESTED/archive/"
+backup_path = "//bbstore/backup$/Profiles/DISSMISS_ZIP/"
 #'//bbstore/backup/Profiles/archive'
 
 
-
-# Путь куда копировать папки профилей
-# \\bbstore\backup$\Profiles
-
-# Путь откуда копировать папки профилей
-# \\bbstore\Profiles$
 
 if __name__ == '__main__':
     main_menu()
